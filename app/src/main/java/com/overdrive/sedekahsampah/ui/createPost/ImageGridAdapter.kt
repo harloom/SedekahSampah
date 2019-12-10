@@ -21,7 +21,7 @@ class ImageGridAdapter constructor(
     @SuppressLint("ViewHolder")
     override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
         val img = list[p0]
-        val inflater = p1?.context?.
+        val inflater = p2?.context?.
             getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view = inflater.inflate(item_thumbail, null)
         try {

@@ -6,10 +6,13 @@
     android:layout_height="match_parent">
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:background="@drawable/background_profile"
+        app:elevation="0dp"
+        android:background="@android:color/transparent"
         android:layout_height="wrap_content">
             <androidx.appcompat.widget.Toolbar
                 app:title="Home"
+                android:id="@+id/toolbar_home"
+                android:background="@color/colorPrimary"
                 app:titleTextColor="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -17,7 +20,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-
+            android:background="@drawable/background_profile"
             android:layout_height="100dp">
 
             <TextView
@@ -59,18 +62,25 @@
                 app:layout_constraintEnd_toStartOf="@+id/tv_displayName"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
+            <FrameLayout
                 android:id="@+id/edit_profile"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:tint="@android:color/white"
-                android:src="@drawable/ic_edit"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:clickable="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_displayName"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginEnd="8dp"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:tint="@android:color/white"
+                    android:src="@drawable/ic_more_horiz_black_24dp"
+                    />
+
+            </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

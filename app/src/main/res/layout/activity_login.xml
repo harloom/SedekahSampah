@@ -49,9 +49,8 @@
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
-        android:onClick="actionGoogle"
         android:layout_width="match_parent"
-        android:layout_height="38dp"
+        android:layout_height="wrap_content"
         android:layout_margin="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

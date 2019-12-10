@@ -5,23 +5,35 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
+import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.overdrive.sedekahsampah.MainActivity
 
 import com.overdrive.sedekahsampah.R
 import com.overdrive.sedekahsampah.ui.createPost.CreateActivity
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.fragment_home.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+
 
 class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var ci_pitchure : CircleImageView
     private lateinit var  displayName : TextView
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,12 +48,15 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
+
         initializeUi(view);
-
-
         val user  = FirebaseAuth.getInstance().currentUser
         updateUIUser(user)
+
+
+        view.findViewById<FrameLayout>(R.id.edit_profile).setOnClickListener {
+
+        }
     }
 
 
@@ -62,6 +77,9 @@ class HomeFragment : Fragment() {
 
 
     private fun initializeUi(view: View) {
+        val toolbar = view.findViewById<Toolbar>(R.id.toolbar_home)
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        setHasOptionsMenu(true)
         ci_pitchure = view.findViewById(R.id.profile_image)
         displayName = view.findViewById(R.id.tv_displayName)
     }

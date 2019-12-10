@@ -10,6 +10,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.SignInButton
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -23,6 +24,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var googleButton : SignInButton
 
     companion object{
         const val  RC_SIGN_IN = 1
@@ -31,6 +33,13 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         initConfigure()
+        if(auth.currentUser !=null){
+            return goToMain()
+        }
+        googleButton = findViewById<SignInButton>(R.id.sign_in_button)
+        googleButton.setOnClickListener {
+            signIn()
+        }
     }
 
 
@@ -54,11 +63,12 @@ class LoginActivity : AppCompatActivity() {
                 firebaseAuthWithGoogle(it)
             }.addOnFailureListener {
                 Toast.makeText(this, "Google sign in failed:(", Toast.LENGTH_LONG).show()
-                sign_in_button.isEnabled =true
+                enableButton()
             }
         }
     }
     private fun signIn() {
+        println("SigIN")
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
@@ -94,12 +104,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun enableButton(){
-        sign_in_button.isEnabled =true
+        googleButton.isEnabled =true
         sign_in_guest.isEnabled =true
     }
 
     fun actionGuest(view: View) {
-        sign_in_guest.isEnabled =false
+        view.isEnabled =false
         auth.signInAnonymously()
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -117,11 +127,9 @@ class LoginActivity : AppCompatActivity() {
             }
 
     }
-    fun actionGoogle(view: View) {
-        sign_in_button.isEnabled =false
-        signIn()
 
-    }
+
+
 
     private fun goToMain(){
         startActivity(Intent(this@LoginActivity,MainActivity::class.java).

@@ -9,21 +9,26 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:background="@drawable/background_profile"
+        app:elevation="0dp"
+         android:background="@android:color/transparent"
         android:layout_height="70dp">
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             app:title="Buat Postingan"
+            android:elevation="4dp"
+            android:background="@drawable/background_profile"
             app:titleTextColor="@android:color/white"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
+
             />
 
     </com.google.android.material.appbar.AppBarLayout>
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         >
         <LinearLayout
@@ -68,7 +73,7 @@
                 android:id="@+id/ti_content"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="99dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:layout_marginBottom="8dp"
                 app:boxBackgroundColor="@android:color/transparent"
@@ -86,12 +91,11 @@
                     android:gravity="start"
                     android:hint="@string/tuliskan"
                     android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
-                    android:maxLines="20"
-                    android:lines="10"
                     android:imeOptions="actionNext"
                     android:scrollbars="vertical"
                     android:paddingStart="16dp"
                     android:paddingEnd="8dp"
+                    android:minLines="8"
                     android:textColor="#454545"
                     android:textColorHighlight="#EEE8E8"
                     android:textColorHint="#454545"
@@ -101,13 +105,13 @@
             <GridView
                 android:id="@+id/grid_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:numColumns="auto_fit"
+                android:layout_height="200dp"
+                android:numColumns="3"
 
                 />
 
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 <LinearLayout
     android:layout_gravity="bottom"
     android:layout_width="match_parent"
@@ -119,7 +123,7 @@
         app:cornerRadius="0dp"
         android:layout_width="match_parent"
         app:iconTint="@color/colorPrimary"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@android:color/white"
         android:text="@string/foto"
         android:gravity="start"
         app:elevation="0dp"
@@ -131,7 +135,7 @@
         android:layout_weight="1"
         android:layout_width="match_parent"
         app:iconTint="@color/colorPrimary"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@android:color/white"
         android:text="@string/gallery"
         app:cornerRadius="0dp"
         app:elevation="0dp"

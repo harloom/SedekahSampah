@@ -1,52 +1,65 @@
 package com.overdrive.sedekahsampah.ui.createPost
 
+import android.Manifest
 import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.GridView
 import android.widget.Toast
-import com.github.dhaval2404.imagepicker.ImagePicker
 import com.overdrive.sedekahsampah.R
 import com.overdrive.sedekahsampah.models.uriImage
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
 import kotlinx.android.synthetic.main.activity_create.*
+import net.alhazmy13.gota.Gota
+import net.alhazmy13.gota.GotaResponse
+import pl.aprilapps.easyphotopicker.DefaultCallback
+import pl.aprilapps.easyphotopicker.EasyImage
+import pl.aprilapps.easyphotopicker.MediaFile
+import pl.aprilapps.easyphotopicker.MediaSource
 import java.io.File
 
-class CreateActivity : AppCompatActivity() {
+class CreateActivity : AppCompatActivity(), Gota.OnRequestPermissionsBack {
+    override fun onRequestBack(requestId: Int, gotaResponse: GotaResponse) {
+        if(gotaResponse.isAllGranted){
+            easyImage.openCameraForImage(this@CreateActivity)
+        }else{
+            permission()
+        }
+    }
 
+    private lateinit var easyImage: EasyImage
     private lateinit var adapter: ImageGridAdapter
     private var imageGrid : MutableList<uriImage> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        easyImage = EasyImage.Builder(this@CreateActivity).setCopyImagesToPublicGalleryFolder(true)
+            .setFolderName(getString(R.string.app_name)).allowMultiple(false).build()
+
         girdViewInit()
 
         action_camera.setOnClickListener {
-            ImagePicker.with(this)
-                .cameraOnly()
-                .compress(1024)//User can only capture image using Camera
-                .start{
-                        resultCode, data ->
-                    if (resultCode == Activity.RESULT_OK) {
-                        //Image Uri will not be null for RESULT_OK
-                        val fileUri = data?.data
-                        //You can get File object from intent
-                        val file = ImagePicker.getFile(data)
-                        //You can also get File Path from intent
-                        val filePath = ImagePicker.getFilePath(data)
-                        imageGrid.add(uriImage(url = filePath.toString()))
-                        adapter.notifyDataSetChanged()
-                    } else if (resultCode == ImagePicker.RESULT_ERROR) {
-                        Toast.makeText(this, ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show()
-                    }
-                }
+            loadImageFromCammera()
         }
+
+
+        action_library.setOnClickListener {
+           com.github.dhaval2404.imagepicker.ImagePicker.
+               with(this@CreateActivity).
+               galleryOnly().
+               compress(1024).start(101)
+        }
+
     }
+
+
 
 
 
@@ -72,6 +85,63 @@ class CreateActivity : AppCompatActivity() {
 
         }
 
+
+    }
+
+
+    private fun loadImageFromCammera(){
+
+        permission()
+
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+
+        if ( requestCode == 101 &&  resultCode == Activity.RESULT_OK) {
+            //Image Uri will not be null for RESULT_OK
+            val fileUri = data?.data
+
+            //You can get File object from intent
+            val file = com.github.dhaval2404.imagepicker.ImagePicker.getFile(data)
+
+            //You can also get File Path from intent
+            val filePath = com.github.dhaval2404.imagepicker.ImagePicker.getFilePath(data)
+            println(filePath)
+            imageGrid.add(uriImage(filePath.toString()))
+            adapter.notifyDataSetChanged()
+
+
+        } else if (resultCode == com.github.dhaval2404.imagepicker.ImagePicker.RESULT_ERROR) {
+            Toast.makeText(this, com.github.dhaval2404.imagepicker.ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
+        } else {
+            easyImage.handleActivityResult(requestCode,resultCode,data,this@CreateActivity,object  :
+                DefaultCallback() {
+                override fun onMediaFilesPicked(imageFiles: Array<MediaFile>, source: MediaSource) {
+                    val filePath  = imageFiles[0].file.path
+                    imageGrid.add(uriImage(filePath.toString()))
+                    adapter.notifyDataSetChanged()
+                }
+            })
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return super.onSupportNavigateUp()
+    }
+
+    private fun permission(){
+
+        Gota.Builder(this@CreateActivity).withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
+
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+
+            Manifest.permission.CAMERA)
+
+            .setListener(this@CreateActivity).check()
 
     }
 }

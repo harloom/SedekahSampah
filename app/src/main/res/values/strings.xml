@@ -7,11 +7,10 @@
     <string name="displayName">Display Name</string>
     <string name="lihat_profile">Lihat lebih detail</string>
 
-    <stiing name="gso">252598738919-9f9420ggnfe3qnvglrra53na7nqfkgnp.apps.googleusercontent.com</stiing>
     <string name="client_screat">1GTtathPszxUhusphgc0BmLF </string>
     <string name="guest">Guest</string>
     <string name="Copyrigth">Copyrigth OverDrive Team</string>
-    <string name="LogOut">LogOut Akun</string>
+    <string name="LogOut">LogOut</string>
     <string name="Help">Bantuan</string>
     <string name="Terms">Kebijakan Privasi</string>
     <string name="privasi">Persyaratan</string>
