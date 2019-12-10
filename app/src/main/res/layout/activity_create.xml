@@ -20,7 +20,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
     <androidx.core.widget.NestedScrollView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
         android:layout_height="wrap_content"
@@ -31,9 +31,115 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etTitle"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_marginBottom="16dp"
+                app:boxBackgroundColor="@android:color/transparent"
+                app:hintEnabled="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/post_titile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:textSize="18sp"
+                    android:hint="@string/title"
+                    android:gravity="start"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="8dp"
+                    android:textColorHint="#454545"
+                    android:textColor="#454545"
+                    android:textColorHighlight="#454545"
+                    android:textColorLink="#454545"
+                    android:maxLength="50"
+                    android:background="@drawable/edit_text_rounded_grey"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/ti_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="99dp"
+                android:layout_margin="8dp"
+                android:layout_marginBottom="8dp"
+                app:boxBackgroundColor="@android:color/transparent"
+                app:hintEnabled="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etTitle"
+                app:layout_constraintVertical_bias="0.51">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/post_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edit_text_rounded_grey"
+                    android:gravity="start"
+                    android:hint="@string/tuliskan"
+                    android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
+                    android:maxLines="20"
+                    android:lines="10"
+                    android:imeOptions="actionNext"
+                    android:scrollbars="vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="8dp"
+                    android:textColor="#454545"
+                    android:textColorHighlight="#EEE8E8"
+                    android:textColorHint="#454545"
+                    android:textColorLink="#454545"
+                    android:textSize="18sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <GridView
+                android:id="@+id/grid_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:numColumns="auto_fit"
+
+                />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+<LinearLayout
+    android:layout_gravity="bottom"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_height="wrap_content">
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/action_camera"
+        android:layout_weight="1"
+        app:cornerRadius="0dp"
+        android:layout_width="match_parent"
+        app:iconTint="@color/colorPrimary"
+        android:backgroundTint="@color/white"
+        android:text="@string/foto"
+        android:gravity="start"
+        app:elevation="0dp"
+        android:textColor="@android:color/black"
+        app:icon="@drawable/ic_camera_alt_black_24dp"
+        android:layout_height="wrap_content"/>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/action_library"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        app:iconTint="@color/colorPrimary"
+        android:backgroundTint="@color/white"
+        android:text="@string/gallery"
+        app:cornerRadius="0dp"
+        app:elevation="0dp"
+        android:gravity="start"
+        android:textColor="@android:color/black"
+        app:icon="@drawable/ic_photo_library_black_24dp"
+        android:layout_height="wrap_content"/>
+</LinearLayout>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

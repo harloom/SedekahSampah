@@ -2,9 +2,9 @@ package com.overdrive.sedekahsampah.models
 
 data class User(
  val uid : String,
- val displayName :String,
- val photoUrl : String,
- val lastLogin : String,
- val numberPhone : String
+ val displayName :String? = null,
+ val photoUrl : String? =null,
+ val lastLogin : Long? =null,
+ val numberPhone : String? =null
 
 )

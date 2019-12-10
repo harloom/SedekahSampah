@@ -6,3 +6,7 @@ data class ListImage (
     val url : String,
     val timeStamp : String
 )
+
+data class uriImage(
+    val url : String
+)
