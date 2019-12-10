@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">SedekahSampah</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_more">Lainnya</string>
+    <string name="displayName">Display Name</string>
+    <string name="lihat_profile">Lihat lebih detail</string>
+</resources>
