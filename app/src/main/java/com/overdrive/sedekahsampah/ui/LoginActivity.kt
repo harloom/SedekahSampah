@@ -82,7 +82,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun saveToFirebase(user: FirebaseUser?) {
-        val ref = FirebaseFirestore.getInstance().collection("user")
+        val ref = FirebaseFirestore.getInstance().collection("users")
         val userDoc = User(user!!.uid,
             user.displayName,user.photoUrl.toString(),user.metadata!!.lastSignInTimestamp,user.phoneNumber)
         ref.document(user.uid).set(userDoc).addOnSuccessListener {
