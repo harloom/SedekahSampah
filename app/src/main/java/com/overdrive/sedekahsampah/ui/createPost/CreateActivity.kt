@@ -129,8 +129,8 @@ class CreateActivity : AppCompatActivity(), Gota.OnRequestPermissionsBack {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        finish()
-        return super.onSupportNavigateUp()
+      onBackPressed()
+        return true
     }
 
     private fun permission(){
