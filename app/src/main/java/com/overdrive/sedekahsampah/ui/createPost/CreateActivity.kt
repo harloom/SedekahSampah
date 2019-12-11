@@ -91,7 +91,10 @@ class CreateActivity : AppCompatActivity(), Gota.OnRequestPermissionsBack {
 
 
                 return  true
-            }else-> return  true
+            }
+
+
+            else-> return super.onOptionsItemSelected(item)
 
         }
 
@@ -149,7 +152,7 @@ class CreateActivity : AppCompatActivity(), Gota.OnRequestPermissionsBack {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-      onBackPressed()
+        onBackPressed()
         return true
     }
 

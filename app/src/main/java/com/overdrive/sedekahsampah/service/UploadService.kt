@@ -26,17 +26,19 @@ import java.io.File
 import java.util.*
 
 class UploadService : Service() {
-    private val CHANNEL_ID = "${application.packageName} upload_service"
-    private val GROUP_UPLOAD = "${application.packageName} group upload"
-    companion object{
+    private val CHANNEL_ID = "com.overdrive.sedekahsampah upload_service"
+    private val GROUP_UPLOAD = "com.overdrive.sedekahsampah group upload"
 
-        fun startService(context: Context, post : Post ,image: List<String>?) {
+    companion object {
+
+        fun startService(context: Context, post: Post, image: List<String>?) {
             val startIntent = Intent(context, UploadService::class.java)
             startIntent.putExtra("inputExtra", post)
-            startIntent.putStringArrayListExtra("inputImage",image as ArrayList<String>)
+            startIntent.putStringArrayListExtra("inputImage", image as ArrayList<String>)
             ContextCompat.startForegroundService(context, startIntent)
 
         }
+
         fun stopService(context: Context) {
             val stopIntent = Intent(context, UploadService::class.java)
             context.stopService(stopIntent)
@@ -53,23 +55,18 @@ class UploadService : Service() {
         //do heavy work on a background thread
         val input = intent?.getParcelableExtra<Post>("inputExtra")
         val inputImage = intent?.getStringArrayListExtra("inputImage")
-        taskUpload(input,inputImage);
-
-
-
-
+        taskUpload(input, inputImage)
         createNotificationChannel()
         val notification = displayNotificationProgress(0)
         startForeground(1, notification)
         //stopSelf();
 
-        return  START_NOT_STICKY
+        return START_NOT_STICKY
     }
 
 
-
     override fun onBind(p0: Intent?): IBinder? {
-      return null
+        return null
     }
 
 
@@ -90,7 +87,7 @@ class UploadService : Service() {
     }
 
 
-    private fun displayNotificationProgress( progression: Int): Notification? {
+    private fun displayNotificationProgress(progression: Int): Notification? {
 
         val notificationIntent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
@@ -116,7 +113,7 @@ class UploadService : Service() {
         input: Post?,
         inputImage: ArrayList<String>?
     ) {
-        val  mStorageRef = FirebaseStorage.getInstance()
+        val mStorageRef = FirebaseStorage.getInstance()
         val db = FirebaseFirestore.getInstance();
         val manager =
             applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -127,52 +124,67 @@ class UploadService : Service() {
 
         val jobParrent = CoroutineScope(IO).launch {
             var progression = 0;
-             val deferredList =   inputImage?.map {
-              async (IO){
-                  try {
-                      val file = Uri.fromFile(File(it))
-                      val riversRef = mStorageRef.reference.child("post/${UUID.randomUUID()}")
-                      val uploadTask = riversRef.putFile(file,metadata)
-                      val  size = uploadTask.snapshot.totalByteCount
-                      val percent = 100.0 * inputImage.size
-                      uploadTask.addOnProgressListener {
-                          val progress = (percent * it.bytesTransferred) / size
-                          progression += progress.toInt()
-                          manager.notify(1,displayNotificationProgress(progression))
-                      }.await()
-                      val url = uploadTask.await().storage.downloadUrl.await().toString()
-                      return@async url
-                  }catch (e : Exception){
-                      return@async "Error : ${e.message}"
-                  }
+            val deferredList = inputImage?.map {
+                async(IO) {
+                    try {
+                        val file = Uri.fromFile(File(it))
+                        val riversRef = mStorageRef.reference.child("post/${UUID.randomUUID()}")
+                        val uploadTask = riversRef.putFile(file, metadata)
+                        val size = uploadTask.snapshot.totalByteCount
+                        val percent = 100.0 * inputImage.size
+                        uploadTask.addOnProgressListener {
+                            val progress = (percent * it.bytesTransferred) / size
+                            progression += progress.toInt()
+                            manager.notify(1, displayNotificationProgress(progression))
+                        }
+                        val url = uploadTask.await().storage.downloadUrl.await().toString()
+                        return@async url
+                    } catch (e: Exception) {
+                        return@async "Error : ${e.message}"
+                    }
 
-              }
+                }
 
-        }
+            }
             val result = deferredList?.awaitAll()
             try {
-                val ref  = db.collection("post").add(input!!).await()
-                val resImage = result?.map {uri->
-                    async (IO){
+                val ref = db.collection("post").add(input!!).await()
+                val resImage = result?.map { uri ->
+                    async(IO) {
                         try {
-                            val q =   ref.collection("images").add(ImageStorage("",ref.id,uri,Timestamp.now())).await()
+                            val q = ref.collection("images")
+                                .add(ImageStorage("", ref.id, uri, Timestamp.now())).await()
                             return@async true
-                        }catch (e : Exception){
-                            return@async  false
+                        } catch (e: Exception) {
+                            return@async false
                         }
                     }
                 }
-               val a =  resImage?.awaitAll()
+                val a = resImage?.awaitAll()
 
-            }catch (e : Exception){
+            } catch (e: Exception) {
                 print("debug : ${e.message}")
             }
 
         }
         jobParrent.invokeOnCompletion {
-                stopSelf()
+            displayNotification("Berhasil", "Berhasil di Upload")
+            stopSelf()
         }
 
+
+    }
+
+    private fun displayNotification(task: String, desc: String) {
+        val manager =
+            applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val buildNotif = NotificationCompat.Builder(
+            applicationContext,
+            CHANNEL_ID
+        )  .setContentTitle(task)
+            .setContentText(desc)
+            .setSmallIcon(R.mipmap.ic_launcher)
+        manager.notify(102, buildNotif.build())
 
     }
 
