@@ -9,7 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.overdrive.sedekahsampah.R
-import com.overdrive.sedekahsampah.models.UriImage
+
 import kotlinx.android.synthetic.main.activity_create.*
 import net.alhazmy13.gota.Gota
 import net.alhazmy13.gota.GotaResponse
@@ -29,7 +29,7 @@ class CreateActivity : AppCompatActivity(), Gota.OnRequestPermissionsBack {
 
     private lateinit var easyImage: EasyImage
     private lateinit var adapter: ImageGridAdapter
-    private var imageGrid : MutableList<UriImage> = mutableListOf()
+    private var imageGrid : MutableList<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,7 +107,7 @@ class CreateActivity : AppCompatActivity(), Gota.OnRequestPermissionsBack {
             //You can also get File Path from intent
             val filePath = com.github.dhaval2404.imagepicker.ImagePicker.getFilePath(data)
             println(filePath)
-            imageGrid.add(UriImage(filePath.toString()))
+            imageGrid.add(filePath.toString())
             adapter.notifyDataSetChanged()
 
 
@@ -118,7 +118,7 @@ class CreateActivity : AppCompatActivity(), Gota.OnRequestPermissionsBack {
                 DefaultCallback() {
                 override fun onMediaFilesPicked(imageFiles: Array<MediaFile>, source: MediaSource) {
                     val filePath  = imageFiles[0].file.path
-                    imageGrid.add(UriImage(filePath.toString()))
+                    imageGrid.add(filePath.toString())
                     adapter.notifyDataSetChanged()
                 }
             })

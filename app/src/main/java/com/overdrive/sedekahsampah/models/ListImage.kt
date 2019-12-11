@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class ListImage (
+data class ImageStorage (
     val id : String,
     val idPost : String,
     val url : String,
@@ -12,6 +12,6 @@ data class ListImage (
 ):Parcelable
 
 @Parcelize
-data class UriImage(
-    val url : String
+data class ListImage(
+    var list : MutableList<ImageStorage>
 ) : Parcelable

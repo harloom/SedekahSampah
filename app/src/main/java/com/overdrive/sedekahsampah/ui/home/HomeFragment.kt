@@ -87,8 +87,8 @@ class HomeFragment : Fragment() {
     private fun updateUIUser(user: FirebaseUser?) {
         user?.let {
             try {
-                Glide.with(context!!).load(it.photoUrl).placeholder(ColorDrawable(Color.LTGRAY)).into(ci_pitchure)
                 displayName.text = it.displayName
+                Glide.with(context!!).load(it.photoUrl).placeholder(R.drawable.ic_launcher_foreground).into(ci_pitchure)
             }catch (e : Exception){
 
             }

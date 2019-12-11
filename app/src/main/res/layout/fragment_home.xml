@@ -57,7 +57,7 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:src="@drawable/ic_account"
+                android:src="@mipmap/ic_launcher"
                 app:civ_border_width="2dp"
                 app:layout_constraintEnd_toStartOf="@+id/tv_displayName"
                 app:layout_constraintStart_toStartOf="parent"
