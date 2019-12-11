@@ -7,11 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.GridView
 import android.widget.Toast
 import com.overdrive.sedekahsampah.R
-import com.overdrive.sedekahsampah.models.uriImage
-import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
+import com.overdrive.sedekahsampah.models.UriImage
 import kotlinx.android.synthetic.main.activity_create.*
 import net.alhazmy13.gota.Gota
 import net.alhazmy13.gota.GotaResponse
@@ -19,7 +17,6 @@ import pl.aprilapps.easyphotopicker.DefaultCallback
 import pl.aprilapps.easyphotopicker.EasyImage
 import pl.aprilapps.easyphotopicker.MediaFile
 import pl.aprilapps.easyphotopicker.MediaSource
-import java.io.File
 
 class CreateActivity : AppCompatActivity(), Gota.OnRequestPermissionsBack {
     override fun onRequestBack(requestId: Int, gotaResponse: GotaResponse) {
@@ -32,7 +29,7 @@ class CreateActivity : AppCompatActivity(), Gota.OnRequestPermissionsBack {
 
     private lateinit var easyImage: EasyImage
     private lateinit var adapter: ImageGridAdapter
-    private var imageGrid : MutableList<uriImage> = mutableListOf()
+    private var imageGrid : MutableList<UriImage> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,7 +107,7 @@ class CreateActivity : AppCompatActivity(), Gota.OnRequestPermissionsBack {
             //You can also get File Path from intent
             val filePath = com.github.dhaval2404.imagepicker.ImagePicker.getFilePath(data)
             println(filePath)
-            imageGrid.add(uriImage(filePath.toString()))
+            imageGrid.add(UriImage(filePath.toString()))
             adapter.notifyDataSetChanged()
 
 
@@ -121,7 +118,7 @@ class CreateActivity : AppCompatActivity(), Gota.OnRequestPermissionsBack {
                 DefaultCallback() {
                 override fun onMediaFilesPicked(imageFiles: Array<MediaFile>, source: MediaSource) {
                     val filePath  = imageFiles[0].file.path
-                    imageGrid.add(uriImage(filePath.toString()))
+                    imageGrid.add(UriImage(filePath.toString()))
                     adapter.notifyDataSetChanged()
                 }
             })

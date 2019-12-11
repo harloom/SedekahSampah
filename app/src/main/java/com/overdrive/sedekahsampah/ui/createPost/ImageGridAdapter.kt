@@ -9,13 +9,13 @@ import android.widget.BaseAdapter
 import com.bumptech.glide.Glide
 
 import com.overdrive.sedekahsampah.R.layout.item_thumbail
-import com.overdrive.sedekahsampah.models.uriImage
+import com.overdrive.sedekahsampah.models.UriImage
 import kotlinx.android.synthetic.main.item_thumbail.view.*
 import java.lang.Exception
 
 class ImageGridAdapter constructor(
     private val context  :Context,
-    private val list: List<uriImage>) : BaseAdapter() {
+    private val list: List<UriImage>) : BaseAdapter() {
 
 
     @SuppressLint("ViewHolder")
@@ -33,7 +33,7 @@ class ImageGridAdapter constructor(
         return view
     }
 
-    override fun getItem(p0: Int): uriImage? {
+    override fun getItem(p0: Int): UriImage? {
         return list[p0]
     }
 
