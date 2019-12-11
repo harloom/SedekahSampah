@@ -8,7 +8,11 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.overdrive.sedekahsampah.R
+import com.overdrive.sedekahsampah.models.Post
+import com.overdrive.sedekahsampah.service.UploadService
 
 import kotlinx.android.synthetic.main.activity_create.*
 import net.alhazmy13.gota.Gota
@@ -77,12 +81,31 @@ class CreateActivity : AppCompatActivity(), Gota.OnRequestPermissionsBack {
         when(item.itemId){
             R.id.action_post->{
                 println("Kirim Ke Service")
+                if(cekForm()){
+                    UploadService.startService(this@CreateActivity,getValue(),imageGrid)
+                    onBackPressed()
+                }else{
+                    Toast.makeText(this@CreateActivity,"Periksa Kembali Form", Toast.LENGTH_LONG).show()
+                }
+
+
+
                 return  true
             }else-> return  true
 
         }
 
 
+    }
+    private fun getValue(): Post {
+        val mPost = Post("",FirebaseAuth.getInstance().currentUser!!.uid,post_titile.text.toString(),
+            post_content.text.toString(), Timestamp.now())
+
+        return mPost
+    }
+
+    private fun cekForm() :  Boolean{
+     return post_titile.text.toString().isNotBlank() && post_content.text.toString().isNotBlank()
     }
 
 

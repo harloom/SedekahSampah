@@ -87,7 +87,13 @@ class HomeFragment : Fragment() {
     private fun updateUIUser(user: FirebaseUser?) {
         user?.let {
             try {
-                displayName.text = it.displayName
+                if(it.isAnonymous){
+                    val number = (1..100).random()
+                    displayName.text = "Guest $number"
+                }else{
+                    displayName.text = it.displayName
+                }
+
                 Glide.with(context!!).load(it.photoUrl).placeholder(R.drawable.ic_launcher_foreground).into(ci_pitchure)
             }catch (e : Exception){
 

@@ -134,5 +134,6 @@ class LoginActivity : AppCompatActivity() {
     private fun goToMain(){
         startActivity(Intent(this@LoginActivity,MainActivity::class.java).
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK));
+        finish()
     }
 }

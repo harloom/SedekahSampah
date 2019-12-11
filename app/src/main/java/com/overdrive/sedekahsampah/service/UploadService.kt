@@ -8,11 +8,13 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageMetadata
 import com.overdrive.sedekahsampah.MainActivity
 import com.overdrive.sedekahsampah.R
-import com.overdrive.sedekahsampah.models.ListImage
+import com.overdrive.sedekahsampah.models.ImageStorage
 import com.overdrive.sedekahsampah.models.Post
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -28,10 +30,10 @@ class UploadService : Service() {
     private val GROUP_UPLOAD = "${application.packageName} group upload"
     companion object{
 
-        fun startService(context: Context, post : Post ,image: ListImage?) {
+        fun startService(context: Context, post : Post ,image: List<String>?) {
             val startIntent = Intent(context, UploadService::class.java)
             startIntent.putExtra("inputExtra", post)
-            startIntent.putExtra("inputImage",image)
+            startIntent.putStringArrayListExtra("inputImage",image as ArrayList<String>)
             ContextCompat.startForegroundService(context, startIntent)
 
         }
@@ -50,7 +52,7 @@ class UploadService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         //do heavy work on a background thread
         val input = intent?.getParcelableExtra<Post>("inputExtra")
-        val inputImage = intent?.getParcelableExtra<ListImage>("inputImage")
+        val inputImage = intent?.getStringArrayListExtra("inputImage")
         taskUpload(input,inputImage);
 
 
@@ -95,8 +97,6 @@ class UploadService : Service() {
             this,
             0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT
         )
-
-
         return NotificationCompat.Builder(
             applicationContext,
             CHANNEL_ID
@@ -114,9 +114,10 @@ class UploadService : Service() {
 
     private fun taskUpload(
         input: Post?,
-        inputImage: ListImage?
+        inputImage: ArrayList<String>?
     ) {
         val  mStorageRef = FirebaseStorage.getInstance()
+        val db = FirebaseFirestore.getInstance();
         val manager =
             applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val metadata = StorageMetadata.Builder()
@@ -126,14 +127,14 @@ class UploadService : Service() {
 
         val jobParrent = CoroutineScope(IO).launch {
             var progression = 0;
-             val deferredList =   inputImage!!.list.map {
-              async {
+             val deferredList =   inputImage?.map {
+              async (IO){
                   try {
-                      val file = Uri.fromFile(File(it.url))
+                      val file = Uri.fromFile(File(it))
                       val riversRef = mStorageRef.reference.child("post/${UUID.randomUUID()}")
                       val uploadTask = riversRef.putFile(file,metadata)
                       val  size = uploadTask.snapshot.totalByteCount
-                      val percent = 100.0 * inputImage.list.size
+                      val percent = 100.0 * inputImage.size
                       uploadTask.addOnProgressListener {
                           val progress = (percent * it.bytesTransferred) / size
                           progression += progress.toInt()
@@ -142,20 +143,34 @@ class UploadService : Service() {
                       val url = uploadTask.await().storage.downloadUrl.await().toString()
                       return@async url
                   }catch (e : Exception){
-                      return@async "Eroro : ${e.message}"
+                      return@async "Error : ${e.message}"
                   }
 
               }
 
         }
-            val result = deferredList.awaitAll()
+            val result = deferredList?.awaitAll()
+            try {
+                val ref  = db.collection("post").add(input!!).await()
+                val resImage = result?.map {uri->
+                    async (IO){
+                        try {
+                            val q =   ref.collection("images").add(ImageStorage("",ref.id,uri,Timestamp.now())).await()
+                            return@async true
+                        }catch (e : Exception){
+                            return@async  false
+                        }
+                    }
+                }
+               val a =  resImage?.awaitAll()
 
-
-
+            }catch (e : Exception){
+                print("debug : ${e.message}")
+            }
 
         }
         jobParrent.invokeOnCompletion {
-
+                stopSelf()
         }
 
 
