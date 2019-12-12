@@ -1,35 +1,39 @@
 package com.overdrive.sedekahsampah.ui.home
 
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.overdrive.sedekahsampah.MainActivity
 
 import com.overdrive.sedekahsampah.R
 import com.overdrive.sedekahsampah.ui.createPost.CreateActivity
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.android.synthetic.main.fragment_home.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
+import com.overdrive.sedekahsampah.models.Post
+import com.overdrive.sedekahsampah.ui.home.post.Interaction
+import com.overdrive.sedekahsampah.ui.home.post.PostAdapter
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), Interaction {
+    override fun onItemSelected(position: Int, item: Post) {
+
+    }
+
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var ci_pitchure : CircleImageView
     private lateinit var  displayName : TextView
-
+    private lateinit var  rcvView : RecyclerView
+    private lateinit var mAdaptaer : PostAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -49,11 +53,10 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initializeUi(view);
+        initializeUi(view)
+        initFirebaseFireStore()
         val user  = FirebaseAuth.getInstance().currentUser
         updateUIUser(user)
-
-
         view.findViewById<FrameLayout>(R.id.edit_profile).setOnClickListener {
 
         }
@@ -74,6 +77,22 @@ class HomeFragment : Fragment() {
         }
 
     }
+    private  fun initFirebaseFireStore(){
+        val db = FirebaseFirestore.getInstance()
+        val ref = db.collection("post").addSnapshotListener { querySnapshot, exception ->
+            if(exception !=null){
+                return@addSnapshotListener
+            }
+            val mlistPost = querySnapshot?.toObjects(Post::class.java)
+            if (mlistPost != null) {
+                initRecyleview(mlistPost)
+            }
+        }
+    }
+
+    private fun initRecyleview(mlistPost: MutableList<Post>) {
+        mAdaptaer.submitList(mlistPost)
+    }
 
 
     private fun initializeUi(view: View) {
@@ -82,6 +101,9 @@ class HomeFragment : Fragment() {
         setHasOptionsMenu(true)
         ci_pitchure = view.findViewById(R.id.profile_image)
         displayName = view.findViewById(R.id.tv_displayName)
+        rcvView = view.findViewById(R.id.rcv_post)
+        mAdaptaer = PostAdapter(this@HomeFragment)
+        rcvView.adapter = mAdaptaer
     }
 
     private fun updateUIUser(user: FirebaseUser?) {

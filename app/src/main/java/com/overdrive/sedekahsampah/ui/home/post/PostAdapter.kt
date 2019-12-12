@@ -14,11 +14,11 @@ import androidx.recyclerview.widget.DiffUtil
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.overdrive.sedekahsampah.R
+import com.overdrive.sedekahsampah.models.ImageStorage
 import com.overdrive.sedekahsampah.models.Post
 import com.overdrive.sedekahsampah.models.User
 import com.snov.timeagolibrary.PrettyTimeAgo
 import kotlinx.android.synthetic.main.item_post.view.*
-import kotlinx.coroutines.tasks.await
 import java.lang.Exception
 
 class PostAdapter(private val interaction: Interaction? = null) :
@@ -76,9 +76,12 @@ class PostAdapter(private val interaction: Interaction? = null) :
             itemView.setOnClickListener {
                 interaction?.onItemSelected(adapterPosition, item)
             }
-            itemView.caption_text.setExpandableText(item.title,item.body)
+
+            initPhoto(item.id , itemView)
+
+            itemView.caption_text.setExpandableText(item?.title,item?.body)
             itemView.timeAgo.text = PrettyTimeAgo.getTimeAgo(item.timeStamp.seconds * 1000)
-            val docUser = FirebaseFirestore.getInstance().collection("users").document(item.uid)
+            val docUser = FirebaseFirestore.getInstance().collection("users").document(item.uid!!)
             docUser.get().addOnSuccessListener {
                 try {
                     val user = it.toObject(User::class.java)
@@ -96,8 +99,17 @@ class PostAdapter(private val interaction: Interaction? = null) :
 
         }
 
+        fun initPhoto(id: String, itemView: View) {
+            val db = FirebaseFirestore.getInstance().collection("post")
+                .document(id).collection("images")
+                .get().addOnSuccessListener {
+                    val mList = it.toObjects(ImageStorage::class.java)
+                    itemView.imageSlider.sliderAdapter = SlideAdapter(itemView.context,mList)
+                }
+        }
 
-        private fun TextView.setExpandableText(senderName: String, caption: String) {
+
+        private fun TextView.setExpandableText(senderName: String?, caption: String?) {
             post {
                 setCaption(senderName, caption)
                 setOnClickListener {
@@ -110,7 +122,7 @@ class PostAdapter(private val interaction: Interaction? = null) :
         }
 
 
-        private fun TextView.setCaption(senderName: String, caption: String) {
+        private fun TextView.setCaption(senderName: String?, caption: String?) {
             text = getFullCaption(senderName, caption)
 
             if (lineCount > DEFAULT_LINES) {
@@ -125,9 +137,9 @@ class PostAdapter(private val interaction: Interaction? = null) :
                     .bold { append(senderName) }
                     .append("  ")
                     .append(
-                        caption.substring(
+                        caption?.substring(
                             0,
-                            lastCharShown - suffix.length - 3 - moreString.length - senderName.length
+                            lastCharShown - suffix.length - 3 - moreString.length - senderName.toString().length
                         )
                     )
                     .color(Color.GRAY) { append(actionDisplayText) }
@@ -136,8 +148,8 @@ class PostAdapter(private val interaction: Interaction? = null) :
 
 
             private fun getFullCaption(
-                senderName: String,
-                caption: String
+                senderName: String?,
+                caption: String?
             ) = SpannableStringBuilder()
                 .bold { append(senderName) }
                 .append("  ")

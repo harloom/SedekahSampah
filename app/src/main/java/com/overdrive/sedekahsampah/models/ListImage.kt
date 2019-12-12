@@ -7,6 +7,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ImageStorage (
+    @Transient
     @DocumentId
     val id : String,
     val idPost : String,

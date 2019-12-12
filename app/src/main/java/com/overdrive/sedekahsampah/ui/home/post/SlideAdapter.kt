@@ -7,11 +7,10 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.overdrive.sedekahsampah.R
 import com.overdrive.sedekahsampah.models.ImageStorage
-import com.overdrive.sedekahsampah.models.ListImage
 import com.smarteist.autoimageslider.SliderViewAdapter
 import java.lang.Exception
 
-class SlideAdapter (private val context : Context ,private val  listImage: ListImage)  :
+class SlideAdapter(private val context: Context, private val listImage: MutableList<ImageStorage>)  :
     SliderViewAdapter<SlideAdapter.SliderAdapterVH>() {
     override fun onCreateViewHolder(parent: ViewGroup): SliderAdapterVH {
         val view  =  LayoutInflater.from(parent.context).inflate(R.layout.image_slider_layout,null)
@@ -19,10 +18,10 @@ class SlideAdapter (private val context : Context ,private val  listImage: ListI
     }
 
     override fun onBindViewHolder(viewHolder: SliderAdapterVH?, position: Int) {
-        viewHolder!!.bind(listImage.list[position]);
+        viewHolder!!.bind(listImage[position])
     }
 
-    override fun getCount(): Int = listImage.list.size
+    override fun getCount(): Int = listImage.size
 
 
 

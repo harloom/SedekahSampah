@@ -12,9 +12,9 @@ data class Post (
 
 @DocumentId
  val id : String,
- val uid : String,
- val title : String,
- val body : String,
+ val uid : String? =null,
+ val title : String? =null,
+ val body : String? = null,
  val timeStamp  : Timestamp
 
 ) : Parcelable
