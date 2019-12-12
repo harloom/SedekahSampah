@@ -21,4 +21,6 @@
     <string name="title">Tuliskan Judul</string>
     <string name="tuliskan">Tuliskan Sesuatu</string>
     <string name="gallery">Gallery</string>
+    <string name="more_dots">…</string>
+    <string name="read_more">Selanjutnya</string>
 </resources>

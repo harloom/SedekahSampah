@@ -1,6 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_marginBottom="8dp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/photo_user"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_margin="8dp"
+            android:src="@mipmap/ic_launcher"
+            app:civ_border_color="@android:color/transparent"
+            />
+
+        <TextView
+            android:id="@+id/tv_displayName"
+            android:text="Nama"
+            android:layout_margin="8dp"
+            android:textColor="#000000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/timeAgo"
+        android:text="1 minute"
+        android:layout_marginStart="16dp"
+        android:textColor="#000000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <androidx.cardview.widget.CardView
+        app:cardCornerRadius="6dp"
+        android:layout_margin="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.smarteist.autoimageslider.SliderView
+            android:id="@+id/imageSlider"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            app:sliderAnimationDuration="600"
+            app:sliderAutoCycleDirection="back_and_forth"
+            app:sliderAutoCycleEnabled="true"
+            app:sliderCircularHandlerEnabled="true"
+            app:sliderIndicatorAnimationDuration="600"
+            app:sliderIndicatorGravity="center_horizontal|bottom"
+            app:sliderIndicatorMargin="15dp"
+            app:sliderIndicatorOrientation="horizontal"
+            app:sliderIndicatorPadding="3dp"
+            app:sliderIndicatorRadius="2dp"
+            app:sliderIndicatorSelectedColor="#5A5A5A"
+            app:sliderIndicatorUnselectedColor="#FFF"
+            app:sliderScrollTimeInSec="1"
+            app:sliderStartAutoCycle="true" />
+
+    </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/action_komentar"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/ic_forum"
+        android:layout_width="30dp"
+        android:layout_marginBottom="16dp"
+        android:layout_height="30dp"/>
+
+    <TextView
+        android:id="@+id/caption_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="16dp"
+        android:text="Post Caption, It is the first line\n It is the second line"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
 
 </LinearLayout>
