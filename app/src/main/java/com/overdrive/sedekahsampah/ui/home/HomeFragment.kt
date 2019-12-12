@@ -232,6 +232,7 @@ class HomeFragment : Fragment(), Interaction {
             startActivity(Intent(context!! , LoginActivity::class.java).addFlags(
                 Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             ))
+            activity?.finish()
         }catch (e : Exception){
             shomethingError()
 

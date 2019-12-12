@@ -48,6 +48,7 @@ class MoreFragment : Fragment() {
             startActivity(Intent(context!! , LoginActivity::class.java).addFlags(
               Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             ))
+            activity?.finish()
         }catch (e : Exception){
             Toast.makeText(context!!,"Something is Error Please Try Again",Toast.LENGTH_LONG).show()
             view.findViewById<LinearLayout>(R.id.action_logOut).isEnabled = true
