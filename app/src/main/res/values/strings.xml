@@ -23,4 +23,8 @@
     <string name="gallery">Gallery</string>
     <string name="more_dots">…</string>
     <string name="read_more">Selanjutnya</string>
+    <string name="anymous">Kamu Tamu</string>
+    <string name="silhakanLogin">Silahkan Login Dulu..</string>
+    <string name="pemberitahuan">Pemberitahuan</string>
+    <string name="terhapus">Terhapus</string>
 </resources>

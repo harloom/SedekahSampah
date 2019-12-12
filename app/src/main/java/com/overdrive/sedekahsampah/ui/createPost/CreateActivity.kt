@@ -108,7 +108,7 @@ class CreateActivity : AppCompatActivity(), Gota.OnRequestPermissionsBack {
     }
 
     private fun cekForm() :  Boolean{
-     return post_titile.text.toString().isNotBlank() && post_content.text.toString().isNotBlank()
+     return post_titile.text.toString().isNotBlank() && post_content.text.toString().isNotBlank() && imageGrid.isNotEmpty()
     }
 
 

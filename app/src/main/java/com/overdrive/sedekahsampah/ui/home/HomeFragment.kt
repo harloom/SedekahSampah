@@ -1,10 +1,12 @@
 package com.overdrive.sedekahsampah.ui.home
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 
 import androidx.lifecycle.ViewModelProviders
@@ -18,13 +20,35 @@ import de.hdodenhof.circleimageview.CircleImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.MaterialDialog
 import com.google.firebase.firestore.FirebaseFirestore
+
+
+import com.overdrive.sedekahsampah.models.ImageStorage
 import com.overdrive.sedekahsampah.models.Post
+import com.overdrive.sedekahsampah.ui.LoginActivity
 import com.overdrive.sedekahsampah.ui.home.post.Interaction
+import com.overdrive.sedekahsampah.ui.home.post.InteractionEditClick
 import com.overdrive.sedekahsampah.ui.home.post.PostAdapter
+import com.overdrive.sedekahsampah.ui.home.post.PostInfo
+import com.stfalcon.imageviewer.StfalconImageViewer
 
 
 class HomeFragment : Fragment(), Interaction {
+    override fun onActionMoreSelected(position: Int, item: Post) {
+        if(FirebaseAuth.getInstance().currentUser!!.isAnonymous){
+            dialogAnymous(context!!)
+            return
+        }
+        goToMorePost(item)
+    }
+
+    override fun onImageSelected(image: MutableList<ImageStorage>) {
+        StfalconImageViewer.Builder<ImageStorage>(context!!, image) { v, im ->
+            Glide.with(v).load(im.url).into(v)
+        }.show()
+    }
+
     override fun onItemSelected(position: Int, item: Post) {
 
     }
@@ -55,6 +79,7 @@ class HomeFragment : Fragment(), Interaction {
 
         initializeUi(view)
         initFirebaseFireStore()
+
         val user  = FirebaseAuth.getInstance().currentUser
         updateUIUser(user)
         view.findViewById<FrameLayout>(R.id.edit_profile).setOnClickListener {
@@ -71,6 +96,11 @@ class HomeFragment : Fragment(), Interaction {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.action_to_createActivity->{
+
+                if(FirebaseAuth.getInstance().currentUser!!.isAnonymous){
+                    dialogAnymous(context!!)
+                    return true
+                }
                 startActivity(Intent(context!!,CreateActivity::class.java))
                 true
             }else-> true
@@ -125,5 +155,91 @@ class HomeFragment : Fragment(), Interaction {
 
     override fun onDestroyView() {
         super.onDestroyView()
+    }
+
+
+    private fun goToMorePost(item : Post){
+        val newFragment = PostInfo(item,onThreadCallback)
+
+        // The device is using a large layout, so show the fragment as a dialog
+        if (fragmentManager != null) {
+            newFragment.show(childFragmentManager, "morePost")
+        }
+
+
+    }
+
+    private val onThreadCallback: InteractionEditClick = object  : InteractionEditClick {
+        override fun onDeleteListener(item: Post) {
+            FirebaseFirestore.getInstance().collection("post").document(item.id!!).delete().addOnSuccessListener {
+                alertDialog(context!!)
+            }.addOnFailureListener {
+                shomethingError()
+
+            }
+        }
+
+        override fun onEditListerner(id: String, title: String?, content: String?) {
+            val docRef = FirebaseFirestore.getInstance().collection("post").document(id)
+             docRef.update(mapOf(
+                 "title" to title,
+                 "body" to content
+             )).addOnSuccessListener {
+                 Toast.makeText(context , "Post Berubah " ,Toast.LENGTH_LONG).show()
+            }.addOnFailureListener {
+                shomethingError()
+
+            }
+        }
+
+        override fun onLaporListener(item: Post) {
+            Toast.makeText(context , "onLaporListener " ,Toast.LENGTH_LONG).show()
+        }
+
+    }
+
+    private fun dialogAnymous(contex : Context){
+        MaterialDialog(contex).show {
+            title(R.string.anymous)
+            message(R.string.silhakanLogin)
+            cornerRadius(16f)
+            positiveButton(text = "Iya"){
+                dismiss()
+                goLogin()
+
+            }
+            negativeButton(text = "Tidak"){
+                dismiss()
+            }
+        }
+    }
+
+    private fun alertDialog(contex: Context) {
+        MaterialDialog(contex).show {
+            title(R.string.pemberitahuan)
+            message(R.string.terhapus)
+            cornerRadius(16f)
+            positiveButton(text = "Iya") {
+                dismiss()
+
+            }
+        }
+    }
+
+    private fun goLogin() {
+        try {
+            FirebaseAuth.getInstance().signOut()
+            startActivity(Intent(context!! , LoginActivity::class.java).addFlags(
+                Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            ))
+        }catch (e : Exception){
+            shomethingError()
+
+        }
+
+    }
+
+    private fun shomethingError(){
+        Toast.makeText(context!!,"Something is Error Please Try Again",Toast.LENGTH_LONG).show()
     }
 }

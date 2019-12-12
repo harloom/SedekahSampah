@@ -11,6 +11,7 @@
         android:layout_height="wrap_content">
             <androidx.appcompat.widget.Toolbar
                 app:title="Home"
+                app:layout_scrollFlags="scroll|enterAlways"
                 android:id="@+id/toolbar_home"
                 android:background="@color/colorPrimary"
                 app:titleTextColor="@android:color/white"

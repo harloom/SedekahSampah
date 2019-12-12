@@ -77,10 +77,15 @@ class PostAdapter(private val interaction: Interaction? = null) :
                 interaction?.onItemSelected(adapterPosition, item)
             }
 
-            initPhoto(item.id , itemView)
+            itemView.action_postMore.setOnClickListener {
+                interaction?.onActionMoreSelected(adapterPosition,item)
+            }
+
+
+            initPhoto(item.id!! , itemView)
 
             itemView.caption_text.setExpandableText(item?.title,item?.body)
-            itemView.timeAgo.text = PrettyTimeAgo.getTimeAgo(item.timeStamp.seconds * 1000)
+            itemView.timeAgo.text = PrettyTimeAgo.getTimeAgo(item.timeStamp!!.seconds * 1000)
             val docUser = FirebaseFirestore.getInstance().collection("users").document(item.uid!!)
             docUser.get().addOnSuccessListener {
                 try {
@@ -104,7 +109,7 @@ class PostAdapter(private val interaction: Interaction? = null) :
                 .document(id).collection("images")
                 .get().addOnSuccessListener {
                     val mList = it.toObjects(ImageStorage::class.java)
-                    itemView.imageSlider.sliderAdapter = SlideAdapter(itemView.context,mList)
+                    itemView.imageSlider.sliderAdapter = SlideAdapter(itemView.context,mList,interaction!!)
                 }
         }
 
@@ -161,6 +166,8 @@ class PostAdapter(private val interaction: Interaction? = null) :
 
     interface Interaction {
         fun onItemSelected(position: Int, item: Post)
+        fun onImageSelected(image: MutableList<ImageStorage>)
+        fun onActionMoreSelected(position: Int,item: Post)
     }
 
 

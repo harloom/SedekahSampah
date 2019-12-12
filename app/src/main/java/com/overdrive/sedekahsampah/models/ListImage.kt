@@ -9,13 +9,9 @@ import kotlinx.android.parcel.Parcelize
 data class ImageStorage (
     @Transient
     @DocumentId
-    val id : String,
-    val idPost : String,
-    val url : String,
-    val timeStamp : Timestamp
+    val id : String?=null,
+    val idPost : String?=null,
+    val url : String?=null,
+    val timeStamp : Timestamp?=null
 ):Parcelable
 
-@Parcelize
-data class ListImage(
-    var list : MutableList<ImageStorage>
-) : Parcelable

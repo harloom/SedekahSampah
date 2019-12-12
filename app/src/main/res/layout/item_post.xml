@@ -4,6 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_marginBottom="8dp"
+    android:elevation="2dp"
     android:layout_height="wrap_content">
 
     <LinearLayout
@@ -28,13 +29,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>
-    <TextView
-        android:id="@+id/timeAgo"
-        android:text="1 minute"
-        android:layout_marginStart="16dp"
-        android:textColor="#000000"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        >
+        <TextView
+            android:id="@+id/timeAgo"
+            android:text="1 minute"
+            android:layout_marginStart="16dp"
+            android:textColor="#000000"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:clickable="true"
+            android:id="@+id/action_postMore"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="16dp"
+            android:tint="@android:color/black"
+            android:src="@drawable/ic_more_horiz_black_24dp"
+            android:focusable="true" />
+    </RelativeLayout>
+
     <androidx.cardview.widget.CardView
         app:cardCornerRadius="6dp"
         android:layout_margin="16dp"
@@ -47,7 +70,7 @@
             android:layout_height="300dp"
             app:sliderAnimationDuration="3000"
             app:sliderAutoCycleDirection="back_and_forth"
-            app:sliderAutoCycleEnabled="true"
+            app:sliderAutoCycleEnabled="false"
             app:sliderCircularHandlerEnabled="true"
             app:sliderIndicatorAnimationDuration="600"
             app:sliderIndicatorGravity="center_horizontal|bottom"
@@ -58,7 +81,7 @@
             app:sliderIndicatorSelectedColor="#5A5A5A"
             app:sliderIndicatorUnselectedColor="#FFF"
             app:sliderScrollTimeInSec="1"
-            app:sliderStartAutoCycle="true" />
+            app:sliderStartAutoCycle="false" />
 
     </androidx.cardview.widget.CardView>
 
@@ -77,9 +100,15 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:lineSpacingExtra="4dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="5dp"
         android:text="Post Caption, It is the first line\n It is the second line"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="14dp"
+        android:background="#cccccc"/>
 
 
 </LinearLayout>

@@ -11,7 +11,7 @@
         <androidx.appcompat.widget.Toolbar
             app:title="Laimnya"
             android:background="@drawable/background_profile"
-            app:titleTextColor="@android:color/white"
+            app:titleTextColor="@color/colorPrimary"
             android:layout_width="match_parent"
             android:elevation="4dp"
             android:layout_height="?attr/actionBarSize"
@@ -41,7 +41,7 @@
                 android:layout_marginStart="2dp"
                 android:layout_marginEnd="2dp"
                 android:foreground="?android:attr/selectableItemBackground"
-                app:cardBackgroundColor="@color/colorPrimary"
+                app:cardBackgroundColor="@color/color_white"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="5dp"
                 app:cardUseCompatPadding="true">
@@ -55,11 +55,13 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="40dp"
+                            android:tint="@color/colorPrimary"
                             android:layout_height="40dp"
                             android:src="@drawable/ic_live_help_black_24dp" />
 
@@ -72,7 +74,7 @@
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="@string/Help"
-                            android:textColor="@android:color/white"
+                            android:textColor="@color/colorPrimary"
                             android:textSize="16sp" />
 
                     </LinearLayout>
@@ -81,6 +83,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="10dp"
+
                         android:layout_marginBottom="10dp"
                         android:background="#cccccc" />
 
@@ -88,11 +91,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
+                        android:tint="@color/colorPrimary"
                         android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
+                            android:tint="@color/colorPrimary"
                             android:src="@drawable/ic_security" />
 
                         <TextView
@@ -104,7 +109,7 @@
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="@string/Terms"
-                            android:textColor="@android:color/white"
+                            android:textColor="@color/colorPrimary"
                             android:textSize="16sp" />
 
                     </LinearLayout>
@@ -120,11 +125,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
+
+                        android:tint="@color/colorPrimary"
                         android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
+                            android:tint="@color/colorPrimary"
                             android:src="@drawable/ic_persayratan" />
 
                         <TextView
@@ -136,7 +144,7 @@
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="@string/privasi"
-                            android:textColor="@android:color/white"
+                            android:textColor="@color/colorPrimary"
                             android:textSize="16sp" />
 
                     </LinearLayout>
@@ -157,6 +165,7 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
+                            android:tint="@color/colorPrimary"
                             android:src="@drawable/ic_star_black_24dp" />
 
                         <TextView
@@ -168,7 +177,7 @@
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="@string/rating"
-                            android:textColor="@android:color/white"
+                            android:textColor="@color/colorPrimary"
                             android:textSize="16sp" />
 
                     </LinearLayout>
@@ -192,7 +201,7 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:tint="@android:color/white"
+                            android:tint="@color/colorPrimary"
                             android:src="@drawable/ic_exit_to_app_black_24dp" />
 
                         <TextView
@@ -204,7 +213,7 @@
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="@string/LogOut"
-                            android:textColor="@android:color/white"
+                            android:textColor="@color/colorPrimary"
                             android:textSize="16sp" />
 
                     </LinearLayout>
@@ -240,7 +249,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
+                android:textColor="@color/colorPrimary"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:textAlignment="center"
