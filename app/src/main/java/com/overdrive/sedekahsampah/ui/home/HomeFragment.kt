@@ -22,6 +22,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 
 
 import com.overdrive.sedekahsampah.models.ImageStorage
@@ -109,7 +110,7 @@ class HomeFragment : Fragment(), Interaction {
     }
     private  fun initFirebaseFireStore(){
         val db = FirebaseFirestore.getInstance()
-        val ref = db.collection("post").addSnapshotListener { querySnapshot, exception ->
+        val ref = db.collection("post").orderBy("timeStamp", Query.Direction.DESCENDING).addSnapshotListener { querySnapshot, exception ->
             if(exception !=null){
                 return@addSnapshotListener
             }
