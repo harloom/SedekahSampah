@@ -19,6 +19,7 @@ import com.overdrive.sedekahsampah.ui.createPost.CreateActivity
 import de.hdodenhof.circleimageview.CircleImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.firebase.firestore.FirebaseFirestore
@@ -32,10 +33,19 @@ import com.overdrive.sedekahsampah.ui.home.post.Interaction
 import com.overdrive.sedekahsampah.ui.home.post.InteractionEditClick
 import com.overdrive.sedekahsampah.ui.home.post.PostAdapter
 import com.overdrive.sedekahsampah.ui.home.post.PostInfo
+import com.overdrive.sedekahsampah.ui.home.post.komentar.KomentarBottomFragment
+import com.overdrive.sedekahsampah.ui.home.post.komentar.KomentarBottomFragment.Companion.POST_KOMENTAR
 import com.stfalcon.imageviewer.StfalconImageViewer
 
 
 class HomeFragment : Fragment(), Interaction {
+    override fun onKomentarSelected(position: Int, item: Post) {
+        val bundleof = bundleOf(POST_KOMENTAR to item)
+        val kb =KomentarBottomFragment()
+        kb.arguments = bundleof
+        kb.show(childFragmentManager,"KomentarSheet")
+    }
+
     override fun onActionMoreSelected(position: Int, item: Post) {
         if(FirebaseAuth.getInstance().currentUser!!.isAnonymous){
             dialogAnymous(context!!)

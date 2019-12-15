@@ -168,6 +168,7 @@ class PostAdapter(private val interaction: Interaction? = null) :
         fun onItemSelected(position: Int, item: Post)
         fun onImageSelected(image: MutableList<ImageStorage>)
         fun onActionMoreSelected(position: Int,item: Post)
+        fun onKomentarSelected(position: Int, item: Post)
     }
 
 
