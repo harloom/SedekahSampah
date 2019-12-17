@@ -1,5 +1,7 @@
 package com.overdrive.sedekahsampah.ui.user
 
+import android.app.Activity
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
@@ -9,10 +11,13 @@ import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bumptech.glide.Glide
+import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.storage.FirebaseStorage
 import com.overdrive.sedekahsampah.R
 import com.overdrive.sedekahsampah.models.ImageStorage
 import com.overdrive.sedekahsampah.models.Post
@@ -24,6 +29,11 @@ import com.overdrive.sedekahsampah.ui.home.post.komentar.KomentarBottomFragment
 import com.stfalcon.imageviewer.StfalconImageViewer
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_user.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import java.io.File
 
 class UserActivity : AppCompatActivity(), Interaction {
     override fun onItemSelected(position: Int, item: Post) {
@@ -156,6 +166,71 @@ class UserActivity : AppCompatActivity(), Interaction {
         rcvView = findViewById(R.id.rcv_post)
         mAdaptaer = PostAdapter(this@UserActivity)
         rcvView.adapter = mAdaptaer
+
+
+        edit_profile.setOnClickListener {
+
+        }
+
+
+        ci_pitchure.setOnClickListener {
+            ImagePicker.with(this@UserActivity).cropSquare().galleryOnly().start {
+                    resultCode, data ->
+
+                if (resultCode == Activity.RESULT_OK) {
+                    val filePath: String? = ImagePicker.getFilePath(data)
+                    if (filePath != null) {
+
+                        CoroutineScope(Main).launch {
+                            renderAndUpload(filePath)
+                        }
+
+                    }
+                } else if (resultCode == ImagePicker.RESULT_ERROR) {
+                    Toast.makeText(
+                        this@UserActivity,
+                        ImagePicker.getError(data),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        this@UserActivity,
+                        "Task Cancelled",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
+
+            }
+        }
+    }
+
+    private suspend fun renderAndUpload(filePath: String) {
+        try {
+            val user = FirebaseAuth.getInstance().currentUser;
+            val storageRef = FirebaseStorage.getInstance().getReference("user/${user?.uid!!}")
+            val file = Uri.fromFile(File(filePath))
+           val uploadTask =  storageRef.putFile(file)
+            uploadTask.addOnProgressListener {
+            }
+            val urlDownload = uploadTask.await().storage.downloadUrl.await()
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setPhotoUri(Uri.parse(urlDownload.toString())).build()
+            user.updateProfile(profileUpdates).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val ref = FirebaseFirestore.getInstance().collection("users")
+                        .document(user.uid)
+                    ref.update("photoUrl",urlDownload.toString()).addOnSuccessListener {
+                        Toast.makeText(this@UserActivity,"Upadate Berhasil",Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
+
+
+        } catch (e: Exception) {
+            shomethingError()
+        }
     }
 
 
