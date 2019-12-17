@@ -35,6 +35,7 @@ import com.overdrive.sedekahsampah.ui.home.post.PostAdapter
 import com.overdrive.sedekahsampah.ui.home.post.PostInfo
 import com.overdrive.sedekahsampah.ui.home.post.komentar.KomentarBottomFragment
 import com.overdrive.sedekahsampah.ui.home.post.komentar.KomentarBottomFragment.Companion.POST_KOMENTAR
+import com.overdrive.sedekahsampah.ui.user.UserActivity
 import com.stfalcon.imageviewer.StfalconImageViewer
 
 
@@ -94,7 +95,10 @@ class HomeFragment : Fragment(), Interaction {
         val user  = FirebaseAuth.getInstance().currentUser
         updateUIUser(user)
         view.findViewById<FrameLayout>(R.id.edit_profile).setOnClickListener {
-
+            if(FirebaseAuth.getInstance().currentUser!!.isAnonymous){
+                return@setOnClickListener
+            }
+                startActivity(Intent(context,UserActivity::class.java))
         }
     }
 
@@ -155,9 +159,10 @@ class HomeFragment : Fragment(), Interaction {
                     displayName.text = "Guest $number"
                 }else{
                     displayName.text = it.displayName
+                    Glide.with(context!!).load(it.photoUrl).into(ci_pitchure)
                 }
 
-                Glide.with(context!!).load(it.photoUrl).placeholder(R.drawable.ic_launcher_foreground).into(ci_pitchure)
+
             }catch (e : Exception){
 
             }

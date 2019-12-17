@@ -28,4 +28,7 @@
     <string name="pemberitahuan">Pemberitahuan</string>
     <string name="terhapus">Terhapus</string>
     <string name="komentar">Tuliskan Sesuatu...</string>
+    <string name="profile">Akun</string>
+    <string name="noHp">No Hp : </string>
+    <string name="valueHp">Belum ada no handphone</string>
 </resources>

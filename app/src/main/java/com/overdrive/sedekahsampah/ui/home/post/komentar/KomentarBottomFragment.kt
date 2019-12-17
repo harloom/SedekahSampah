@@ -4,10 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.overdrive.sedekahsampah.R
 import com.overdrive.sedekahsampah.models.Komentar
 import com.overdrive.sedekahsampah.models.Post
+import com.overdrive.sedekahsampah.utils.change
+
 import kotlinx.android.synthetic.main.bottom_post_komentar_fragment.*
 
 class KomentarBottomFragment: BottomSheetDialogFragment(), KomentarAdapter.Interaction,
@@ -24,6 +32,9 @@ class KomentarBottomFragment: BottomSheetDialogFragment(), KomentarAdapter.Inter
         const val POST_KOMENTAR = "PostKomentar";
     }
 
+
+    private lateinit var formKomentar : TextInputEditText;
+    private lateinit var buttonSend : TextInputLayout
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,19 +45,39 @@ class KomentarBottomFragment: BottomSheetDialogFragment(), KomentarAdapter.Inter
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         post = arguments?.getParcelable<Post>(POST_KOMENTAR)
+        formKomentar = view.findViewById(R.id.etKomentar)
+        buttonSend = view.findViewById(R.id.balasanLayout)
         post?.let {
+            if(FirebaseAuth.getInstance().currentUser!!.isAnonymous){
+                buttonSend.visibility = View.VISIBLE
+            }
+
             initUi(it)
         }
     }
 
-    private fun initUi(it: Post) {
+    private fun initUi(_post: Post) {
         mAdapter = KomentarAdapter(this@KomentarBottomFragment)
         subcribeList()
         balasanLayout.setEndIconOnClickListener(this@KomentarBottomFragment)
         subcribeFrom()
-        subcribeButtonSend()
-
         subcribeStatus()
+        buttonSend.setEndIconOnClickListener {
+            formKomentar.setText("")
+            buttonSend.isEndIconVisible = true
+            FirebaseFirestore.getInstance()
+                .collection("post/${post!!.id}/komentar").add(
+                    Komentar(
+                        idPost =_post.id,
+                        body =  formKomentar.text.toString()
+                        , timeStamp =Timestamp.now(),
+                        uid = FirebaseAuth.getInstance().currentUser!!.uid))
+                .addOnSuccessListener {
+                    Toast.makeText(context,"Komentar is Succesfull",Toast.LENGTH_SHORT).show()
+                }.addOnFailureListener {
+                    Toast.makeText(context,"Komentar is Fail : ${it.message}",Toast.LENGTH_SHORT).show()
+                }
+        }
     }
 
 
@@ -55,43 +86,39 @@ class KomentarBottomFragment: BottomSheetDialogFragment(), KomentarAdapter.Inter
 
 
 
-    private fun subcribeButtonSend() {
-//        balasanLayout.isEndIconVisible = false
-//        viewModel.etKomentar.observe(this@KomentarFragmentBottomSheet, Observer {
-//            balasanLayout.isEndIconVisible = it
-//        })
-    }
     private fun subcribeFrom(){
-//        etKomentar.afterTextChanged {
-//            jobChangeText?.cancel()
-//            jobChangeText = CoroutineScope(Main).launch {
-//                delay(300)
-//                viewModel.fromMassageChange(it)
-//            }
-//        }
+     formKomentar.change {
+        if(it.isBlank()){
+            buttonSend.isEndIconVisible =true
+            return@change
+        }
+
+         buttonSend.isEndIconVisible =false
+      }
     }
     private fun subcribeList() {
         rcv_commentar.apply {
             adapter = mAdapter
         }
 
-//        viewModel.records.observe(this@KomentarFragmentBottomSheet, Observer {
-//            mAdapter.submitList(it)
-//        })
+        FirebaseFirestore.getInstance()
+            .collection("post/${post!!.id}/komentar")
+            .addSnapshotListener { snapshot, exception ->
+                if(exception !=null){
+                    return@addSnapshotListener
+                }
+                val listKomentar = snapshot?.toObjects(Komentar::class.java)
+                if (listKomentar != null) {
+                    mAdapter.submitList(listKomentar)
+                }
+                //not paging
+
+            }
+
     }
 
     private fun subcribeStatus() {
-//        viewModel.initialLoad.observe(this@KomentarFragmentBottomSheet, Observer {
-//            if (it == NetworkState.LOADING) {
-//                // Show loading
-//
-//            } else {
-//                stopAnimation()
-//                if (it.status == NetworkState.Status.SUCCESS_EMPTY) {
-//                    // Show empty state for initial load
-//                }
-//            }
-//        })
+
     }
 
 //    private fun goToMoreThread(
