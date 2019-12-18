@@ -31,4 +31,6 @@
     <string name="profile">Akun</string>
     <string name="noHp">No Hp : </string>
     <string name="valueHp">Belum ada no handphone</string>
+    <string name="cari">Cari</string>
+    <string name="chat">Chat</string>
 </resources>

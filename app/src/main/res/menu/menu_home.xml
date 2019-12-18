@@ -6,4 +6,15 @@
         android:icon="@drawable/ic_edit"
         app:showAsAction="withText|always"
         android:title="@string/buat"/>
+    <group android:id="@+id/group"
+        >
+        <item android:id="@+id/action_search"
+            android:title="@string/cari"
+            android:icon="@drawable/ic_search"
+            />
+        <item android:id="@+id/action_chat"
+            android:title="@string/chat"
+            android:icon="@drawable/ic_message"
+            />
+    </group>
 </menu>

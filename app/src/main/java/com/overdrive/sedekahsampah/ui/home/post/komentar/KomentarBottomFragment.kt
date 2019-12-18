@@ -19,7 +19,30 @@ import com.overdrive.sedekahsampah.utils.change
 import kotlinx.android.synthetic.main.bottom_post_komentar_fragment.*
 
 class KomentarBottomFragment: BottomSheetDialogFragment(), KomentarAdapter.Interaction,
-    View.OnClickListener {
+    View.OnClickListener, InteractionEditClick {
+    override fun onDeleteListener(item: Komentar) {
+        FirebaseFirestore.getInstance()
+            .collection("post/${post!!.id}/komentar").document(item.id.toString())
+            .delete()
+            .addOnSuccessListener {
+                Toast.makeText(context!!,"Deleted",Toast.LENGTH_LONG).show()
+            }.addOnFailureListener {
+                Toast.makeText(context!!,"Something Is Error",Toast.LENGTH_LONG).show()
+            }
+    }
+
+    override fun onEditListerner(id: String, title: String?, content: String?) {
+
+    }
+
+    override fun onLaporListener(item: Komentar) {
+
+    }
+
+    override fun onItemMoreClick(position: Int, item: Komentar) {
+        goToMore(item = item)
+    }
+
     override fun onClick(p0: View?) {
 
     }
@@ -30,6 +53,18 @@ class KomentarBottomFragment: BottomSheetDialogFragment(), KomentarAdapter.Inter
 
     companion object{
         const val POST_KOMENTAR = "PostKomentar";
+    }
+
+
+    private fun goToMore(item : Komentar){
+        val newFragment = KomentarInfo(item,this@KomentarBottomFragment)
+
+        // The device is using a large layout, so show the fragment as a dialog
+        if (fragmentManager != null) {
+            newFragment.show(childFragmentManager, "moreKomentar")
+        }
+
+
     }
 
 
@@ -63,13 +98,14 @@ class KomentarBottomFragment: BottomSheetDialogFragment(), KomentarAdapter.Inter
         subcribeFrom()
         subcribeStatus()
         buttonSend.setEndIconOnClickListener {
+            val tempText = formKomentar.text.toString()
             formKomentar.setText("")
-            buttonSend.isEndIconVisible = true
+            buttonSend.isEndIconVisible = false
             FirebaseFirestore.getInstance()
                 .collection("post/${post!!.id}/komentar").add(
                     Komentar(
                         idPost =_post.id,
-                        body =  formKomentar.text.toString()
+                        body =  tempText
                         , timeStamp =Timestamp.now(),
                         uid = FirebaseAuth.getInstance().currentUser!!.uid))
                 .addOnSuccessListener {
@@ -89,11 +125,11 @@ class KomentarBottomFragment: BottomSheetDialogFragment(), KomentarAdapter.Inter
     private fun subcribeFrom(){
      formKomentar.change {
         if(it.isBlank()){
-            buttonSend.isEndIconVisible =true
+            buttonSend.isEndIconVisible =false
             return@change
         }
 
-         buttonSend.isEndIconVisible =false
+         buttonSend.isEndIconVisible =true
       }
     }
     private fun subcribeList() {

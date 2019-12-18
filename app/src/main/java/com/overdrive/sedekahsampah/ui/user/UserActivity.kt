@@ -35,7 +35,26 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.io.File
 
-class UserActivity : AppCompatActivity(), Interaction {
+class UserActivity : AppCompatActivity(), Interaction, InteractionEdiData {
+    override fun onDataCallback(value: String, keyField: String) {
+        val user = FirebaseAuth.getInstance().currentUser
+        val profileUpdates = UserProfileChangeRequest.Builder()
+            .setDisplayName(value)
+            .build()
+        user?.updateProfile(profileUpdates)?.addOnSuccessListener {
+                val ref = FirebaseFirestore.getInstance().collection("users")
+                    .document(user.uid)
+                ref.update(keyField,value).addOnSuccessListener {
+                    Toast.makeText(this@UserActivity,"Upadate Berhasil",Toast.LENGTH_LONG).show()
+                }.addOnFailureListener {
+                    shomethingError()
+                }
+        }?.addOnFailureListener {
+          shomethingError()
+        }
+
+    }
+
     override fun onItemSelected(position: Int, item: Post) {
 
     }
@@ -63,6 +82,7 @@ class UserActivity : AppCompatActivity(), Interaction {
 
 
     }
+
 
 
     private val onThreadCallback: InteractionEditClick = object  : InteractionEditClick {
@@ -144,6 +164,15 @@ class UserActivity : AppCompatActivity(), Interaction {
         }
     }
 
+    private fun  goFormEdit(value  : String , key : String){
+        val newFragment = DialogEditData(key,value,this@UserActivity)
+
+        // The device is using a large layout, so show the fragment as a dialog
+
+        newFragment.show(supportFragmentManager, "editValue")
+
+    }
+
 
     private  fun initFirebaseFireStore(){
         val db = FirebaseFirestore.getInstance()
@@ -169,39 +198,47 @@ class UserActivity : AppCompatActivity(), Interaction {
 
 
         edit_profile.setOnClickListener {
-
+            goFormEdit( FirebaseAuth.getInstance().currentUser!!.displayName.toString(),"displayName")
         }
+
+       actionUpdateCamera.setOnClickListener {
+           updatePitcure()
+       }
 
 
         ci_pitchure.setOnClickListener {
-            ImagePicker.with(this@UserActivity).cropSquare().galleryOnly().start {
-                    resultCode, data ->
+                updatePitcure()
+        }
+    }
 
-                if (resultCode == Activity.RESULT_OK) {
-                    val filePath: String? = ImagePicker.getFilePath(data)
-                    if (filePath != null) {
+    private fun updatePitcure(){
+        ImagePicker.with(this@UserActivity).cropSquare().galleryOnly().start {
+                resultCode, data ->
 
-                        CoroutineScope(Main).launch {
-                            renderAndUpload(filePath)
-                        }
+            if (resultCode == Activity.RESULT_OK) {
+                val filePath: String? = ImagePicker.getFilePath(data)
+                if (filePath != null) {
 
+                    CoroutineScope(Main).launch {
+                        renderAndUpload(filePath)
                     }
-                } else if (resultCode == ImagePicker.RESULT_ERROR) {
-                    Toast.makeText(
-                        this@UserActivity,
-                        ImagePicker.getError(data),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    Toast.makeText(
-                        this@UserActivity,
-                        "Task Cancelled",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-                }
 
+                }
+            } else if (resultCode == ImagePicker.RESULT_ERROR) {
+                Toast.makeText(
+                    this@UserActivity,
+                    ImagePicker.getError(data),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                Toast.makeText(
+                    this@UserActivity,
+                    "Task Cancelled",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
             }
+
         }
     }
 
@@ -221,6 +258,13 @@ class UserActivity : AppCompatActivity(), Interaction {
                     val ref = FirebaseFirestore.getInstance().collection("users")
                         .document(user.uid)
                     ref.update("photoUrl",urlDownload.toString()).addOnSuccessListener {
+                        try {
+                            Glide.with(this@UserActivity).load(urlDownload).into(ci_pitchure)
+                        }catch (e : Exception){
+
+                        }
+
+
                         Toast.makeText(this@UserActivity,"Upadate Berhasil",Toast.LENGTH_LONG).show()
                     }
                 }
@@ -255,6 +299,7 @@ class UserActivity : AppCompatActivity(), Interaction {
             message(R.string.terhapus)
             cornerRadius(16f)
             positiveButton(text = "Iya") {
+                initFirebaseFireStore()
                 dismiss()
 
             }

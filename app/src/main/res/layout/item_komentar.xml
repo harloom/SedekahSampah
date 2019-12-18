@@ -21,10 +21,25 @@
         android:layout_height="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="John Doe"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/text_commentar_body"
+        app:layout_constraintEnd_toStartOf="@+id/imageView2"
         app:layout_constraintStart_toEndOf="@+id/image_commentar_profile"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/ic_more_horiz_black_24dp"
+        app:layout_constraintBottom_toTopOf="@+id/text_commentar_body"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_commentar_name"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -37,7 +52,6 @@
         android:background="@drawable/edit_text_rounded_grey"
         android:maxWidth="240dp"
         android:padding="16dp"
-        android:text="hi man, how are you?"
         android:textColor="@android:color/black"
         android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"

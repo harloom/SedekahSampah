@@ -81,6 +81,10 @@ class PostAdapter(private val interaction: Interaction? = null) :
                 interaction?.onActionMoreSelected(adapterPosition,item)
             }
 
+            itemView.action_komentar.setOnClickListener {
+                interaction?.onKomentarSelected(adapterPosition,item)
+            }
+
 
             initPhoto(item.id!! , itemView)
 
