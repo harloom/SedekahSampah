@@ -4,17 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/action_to_createActivity"
         android:icon="@drawable/ic_edit"
-        app:showAsAction="withText|always"
+        app:showAsAction="ifRoom"
         android:title="@string/buat"/>
-    <group android:id="@+id/group"
-        >
+
         <item android:id="@+id/action_search"
             android:title="@string/cari"
+            app:showAsAction="ifRoom"
             android:icon="@drawable/ic_search"
             />
-        <item android:id="@+id/action_chat"
-            android:title="@string/chat"
-            android:icon="@drawable/ic_message"
-            />
-    </group>
+
+
 </menu>

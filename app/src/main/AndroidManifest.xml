@@ -18,7 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="q">
-        <activity android:name=".ui.user.UserActivity"></activity>
+        <activity android:name=".ui.PhoneValidation"></activity>
+        <activity android:name=".ui.user.UserActivity" />
         <activity android:name=".ui.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +30,7 @@
         <activity android:name=".ui.createPost.CreateActivity" />
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name" />
 
         <service android:name=".service.UploadService" />
 
