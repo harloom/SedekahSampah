@@ -1,6 +1,7 @@
 package com.overdrive.sedekahsampah.ui.user
 
 import android.app.Activity
+import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -21,6 +22,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.overdrive.sedekahsampah.R
 import com.overdrive.sedekahsampah.models.ImageStorage
 import com.overdrive.sedekahsampah.models.Post
+import com.overdrive.sedekahsampah.ui.PhoneValidation
 import com.overdrive.sedekahsampah.ui.home.post.Interaction
 import com.overdrive.sedekahsampah.ui.home.post.InteractionEditClick
 import com.overdrive.sedekahsampah.ui.home.post.PostAdapter
@@ -204,6 +206,10 @@ class UserActivity : AppCompatActivity(), Interaction, InteractionEdiData {
        actionUpdateCamera.setOnClickListener {
            updatePitcure()
        }
+
+      edit_nohp.setOnClickListener {
+          startActivity(Intent(this@UserActivity,PhoneValidation::class.java))
+      }
 
 
         ci_pitchure.setOnClickListener {

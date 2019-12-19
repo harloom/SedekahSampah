@@ -28,6 +28,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
+        android:inputType="phone"
+        android:singleLine="true"
         android:layout_marginBottom="16dp"
         android:background="@drawable/edit_text_rounded_grey"
         app:layout_constraintBottom_toTopOf="@+id/action_verifikasi"
