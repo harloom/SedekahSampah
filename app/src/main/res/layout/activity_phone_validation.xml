@@ -6,4 +6,81 @@
     android:layout_height="match_parent"
     tools:context=".ui.PhoneValidation">
 
+    <TextView
+        android:id="@+id/tv_pemberitahuan"
+        android:layout_width="match_parent"
+        android:layout_height="19dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="13dp"
+        android:text="@string/phoneNumber"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toTopOf="@+id/phoneNumber"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/phoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/edit_text_rounded_grey"
+        app:layout_constraintBottom_toTopOf="@+id/action_verifikasi"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_pemberitahuan" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/action_verifikasi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/verifikasi"
+        android:textColor="@color/color_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/phoneNumber" />
+
+
+    <LinearLayout
+        android:visibility="invisible"
+        android:id="@+id/frame_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/action_verifikasi">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="19dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
+            android:text="Masukan Kode"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toTopOf="@+id/phoneNumber"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/form_code"
+            android:layout_width="match_parent"
+            android:layout_height="57dp"
+            android:layout_marginStart="16dp"
+
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/edit_text_rounded_grey" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

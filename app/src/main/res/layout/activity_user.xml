@@ -25,18 +25,31 @@
             android:layout_height="200dp">
 
             <TextView
+                android:id="@+id/tv_nama"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/nama"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_nohp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profile_image" />
+
+            <TextView
                 android:id="@+id/tv_displayName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
                 android:text="@string/displayName"
+
                 android:textColor="@android:color/white"
                 android:textSize="14sp"
-
                 app:layout_constraintBottom_toTopOf="@+id/tv_nohp"
                 app:layout_constraintEnd_toStartOf="@+id/edit_profile"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_nama"
                 app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 
             <ImageView
@@ -64,16 +77,14 @@
 
             <FrameLayout
                 android:id="@+id/edit_profile"
-                android:layout_width="wrap_content"
+                android:layout_width="24dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:clickable="true"
                 android:focusable="true"
                 app:layout_constraintBottom_toTopOf="@+id/edit_nohp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_displayName"
                 app:layout_constraintTop_toBottomOf="@+id/profile_image">
 
                 <ImageView
@@ -95,7 +106,6 @@
                 android:text="@string/noHp"
                 android:textColor="@android:color/white"
                 android:textSize="14sp"
-
                 app:layout_constraintEnd_toStartOf="@+id/tv_value_noHp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_displayName" />
@@ -119,7 +129,7 @@
                 android:id="@+id/edit_nohp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:clickable="true"
                 android:focusable="true"
