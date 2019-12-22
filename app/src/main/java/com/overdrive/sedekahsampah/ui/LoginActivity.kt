@@ -3,9 +3,9 @@ package com.overdrive.sedekahsampah.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.preference.PreferenceManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -18,7 +18,9 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.overdrive.sedekahsampah.MainActivity
 import com.overdrive.sedekahsampah.R
+import com.overdrive.sedekahsampah.SetupActivity
 import com.overdrive.sedekahsampah.models.User
+import com.overdrive.sedekahsampah.utils.KEY_SETUP
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
@@ -129,11 +131,26 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
+    private fun cekSetup() : Boolean{
+        val shared= PreferenceManager.getDefaultSharedPreferences(this@LoginActivity)
+
+        return shared.getBoolean(KEY_SETUP,false)
+    }
+
 
 
     private fun goToMain(){
-        startActivity(Intent(this@LoginActivity,MainActivity::class.java).
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK));
-        finish()
+
+        if(cekSetup()){
+            startActivity(Intent(this@LoginActivity,MainActivity::class.java).
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK));
+            finish()
+        }else{
+            startActivity(Intent(this@LoginActivity,SetupActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK))
+            finish()
+        }
+
+
     }
 }

@@ -26,10 +26,10 @@ class PhoneValidation : AppCompatActivity() {
          phoneNumber = findViewById<EditText>(R.id.phoneNumber)
 
         val affineFormats = mutableListOf<String>()
-        affineFormats.add("+62 ([000]) [000]-[00]-[00]")
+        affineFormats.add("+62 ([000]) [0000]-[00]-[00]")
         val listener : MaskedTextChangedListener = MaskedTextChangedListener.Companion.installOn(
             phoneNumber,
-            "+62 ([000]) [000]-[00]-[00]",
+            "+62 ([000]) [0000]-[00]-[00]",
             affineFormats,
             AffinityCalculationStrategy.PREFIX,
             object : MaskedTextChangedListener.ValueListener {

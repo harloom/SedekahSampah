@@ -18,7 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="q">
-        <activity android:name=".ui.PhoneValidation"></activity>
+        <activity android:name=".SetupActivity"></activity>
+        <activity android:name=".ui.PhoneValidation" />
         <activity android:name=".ui.user.UserActivity" />
         <activity android:name=".ui.LoginActivity">
             <intent-filter>

@@ -15,3 +15,5 @@ fun TextInputEditText.change(afterTextChanged: (String) -> Unit) {
   override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
  })
 }
+
+const val KEY_SETUP = "setup"

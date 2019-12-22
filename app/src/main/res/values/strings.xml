@@ -36,4 +36,6 @@
     <string name="phoneNumber">Nomer Telepon</string>
     <string name="verifikasi">Verifikasi</string>
     <string name="nama">Nama : </string>
+    <string name="simpan">Simpan</string>
+    <string name="simpan_tambhakan_nomer">Simpan dan Tambahkan Nomer HP</string>
 </resources>
