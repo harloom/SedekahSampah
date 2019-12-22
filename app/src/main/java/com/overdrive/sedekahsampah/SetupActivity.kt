@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.overdrive.sedekahsampah.ui.PhoneValidation
 import com.overdrive.sedekahsampah.utils.KEY_SETUP
 import kotlinx.android.synthetic.main.activity_setup.*
 import kotlinx.coroutines.CoroutineScope
@@ -42,8 +43,40 @@ class SetupActivity : AppCompatActivity() {
             save()
         }
 
+        action_save_verifikas.setOnClickListener {
+            saveWithNoHp()
+        }
+
     }
 
+
+    private fun saveWithNoHp(){
+        val user = FirebaseAuth.getInstance().currentUser
+        val profileUpdates = UserProfileChangeRequest.Builder()
+            .setDisplayName(txt_nama.text.toString())
+            .build()
+        user?.updateProfile(profileUpdates)?.addOnSuccessListener {
+            val ref = FirebaseFirestore.getInstance().collection("users")
+                .document(user.uid)
+            ref.update("displayName",txt_nama.text.toString()).addOnSuccessListener {
+                val shared= PreferenceManager.getDefaultSharedPreferences(this@SetupActivity)
+                shared.edit {
+                    putBoolean(KEY_SETUP,true)
+                    commit()
+                }
+
+                Toast.makeText(this@SetupActivity,"Upadate Berhasil",Toast.LENGTH_LONG).show()
+                startActivity(
+                    Intent(this@SetupActivity,PhoneValidation::class.java).
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK))
+
+            }.addOnFailureListener {
+                shomethingError()
+            }
+        }?.addOnFailureListener {
+            shomethingError()
+        }
+    }
     private fun save(){
         val user = FirebaseAuth.getInstance().currentUser
         val profileUpdates = UserProfileChangeRequest.Builder()
