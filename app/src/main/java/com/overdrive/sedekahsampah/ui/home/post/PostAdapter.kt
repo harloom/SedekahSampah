@@ -94,8 +94,10 @@ class PostAdapter(private val interaction: Interaction? = null) :
             docUser.get().addOnSuccessListener {
                 try {
                     val user = it.toObject(User::class.java)
+                    if (user != null) {
+                        interaction?.onUserTap(user)
+                    }
                     itemView.tv_displayName.text = user?.displayName
-
                     Glide.with(context).load(user?.photoUrl).placeholder(R.color.colorBgGrey).into(itemView.photo_user)
                 }catch ( e : Exception){
                     itemView.tv_displayName.text =  " Something is Error"
@@ -169,6 +171,7 @@ class PostAdapter(private val interaction: Interaction? = null) :
 
 
     interface Interaction {
+        fun onUserTap(user : User)
         fun onItemSelected(position: Int, item: Post)
         fun onImageSelected(image: MutableList<ImageStorage>)
         fun onActionMoreSelected(position: Int,item: Post)

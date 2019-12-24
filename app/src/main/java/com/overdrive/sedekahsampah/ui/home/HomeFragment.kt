@@ -28,6 +28,7 @@ import com.google.firebase.firestore.Query
 
 import com.overdrive.sedekahsampah.models.ImageStorage
 import com.overdrive.sedekahsampah.models.Post
+import com.overdrive.sedekahsampah.models.User
 import com.overdrive.sedekahsampah.ui.LoginActivity
 import com.overdrive.sedekahsampah.ui.home.post.Interaction
 import com.overdrive.sedekahsampah.ui.home.post.InteractionEditClick
@@ -40,6 +41,10 @@ import com.stfalcon.imageviewer.StfalconImageViewer
 
 
 class HomeFragment : Fragment(), Interaction {
+    override fun onUserTap(user: User) {
+
+    }
+
     override fun onKomentarSelected(position: Int, item: Post) {
         val bundleof = bundleOf(POST_KOMENTAR to item)
         val kb =KomentarBottomFragment()

@@ -22,6 +22,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.overdrive.sedekahsampah.R
 import com.overdrive.sedekahsampah.models.ImageStorage
 import com.overdrive.sedekahsampah.models.Post
+import com.overdrive.sedekahsampah.models.User
 import com.overdrive.sedekahsampah.ui.PhoneValidation
 import com.overdrive.sedekahsampah.ui.home.post.Interaction
 import com.overdrive.sedekahsampah.ui.home.post.InteractionEditClick
@@ -38,6 +39,10 @@ import kotlinx.coroutines.tasks.await
 import java.io.File
 
 class UserActivity : AppCompatActivity(), Interaction, InteractionEdiData {
+    override fun onUserTap(user: User) {
+
+    }
+
     override fun onDataCallback(value: String, keyField: String) {
         val user = FirebaseAuth.getInstance().currentUser
         val profileUpdates = UserProfileChangeRequest.Builder()

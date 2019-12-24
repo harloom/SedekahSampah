@@ -22,12 +22,18 @@ import com.overdrive.sedekahsampah.MainActivity
 import kotlinx.android.synthetic.main.activity_phone_validation.*
 import kotlinx.android.synthetic.main.activity_setup.*
 import java.util.concurrent.TimeUnit
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.view.View
+import com.overdrive.sedekahsampah.utils.change
 
 
 class PhoneValidation : AppCompatActivity() {
 
    private lateinit var action_buton : MaterialButton;
-
+    var number :String=""
+    var mVerificationId : String =  "";
     private lateinit var phoneNumber : EditText;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +43,15 @@ class PhoneValidation : AppCompatActivity() {
 
         action_buton.setOnClickListener {
             action_buton.isEnabled = false
+            frame_code.visibility = View.VISIBLE
             timer.start()
+            sendVerifikasi()
+        }
+
+        form_code.change {
+            if(it.length ==6){
+                verifyVerificationCode(it)
+            }
         }
 
     }
@@ -50,6 +64,7 @@ class PhoneValidation : AppCompatActivity() {
 
         override fun onFinish() {
             action_buton.setText("Kirim Kembali")
+            frame_code.visibility = View.INVISIBLE
             action_buton.isEnabled= true
         }
     }
@@ -58,11 +73,11 @@ class PhoneValidation : AppCompatActivity() {
          phoneNumber = findViewById(R.id.phoneNumber)
 
         val affineFormats = mutableListOf<String>()
-        affineFormats.add("+62 ([000]) [0000]-[00]-[00]")
+        affineFormats.add("+62 ([000]) [0000]-[00]-[000]")
 
         val listener : MaskedTextChangedListener = MaskedTextChangedListener.Companion.installOn(
             phoneNumber,
-            "+62 ([000]) [0000]-[00]-[00]",
+            "+62 ([000]) [0000]-[00]-[000]",
             affineFormats,
             AffinityCalculationStrategy.PREFIX,
             object : MaskedTextChangedListener.ValueListener {
@@ -71,6 +86,7 @@ class PhoneValidation : AppCompatActivity() {
                     extractedValue: String,
                     formattedValue: String
                 ) {
+                    number = extractedValue
                   println("$maskFilled :  $extractedValue  : $formattedValue");
 
                 }
@@ -82,34 +98,67 @@ class PhoneValidation : AppCompatActivity() {
 
     private fun sendVerifikasi(){
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
-            phoneNumber.text.toString(), // Phone number to verify
+            "+62$number", // Phone number to verify
             60, // Timeout duration
             TimeUnit.SECONDS, // Unit of timeout
             this, // Activity (for callback binding)
             callbacks) // OnVerificationStateChangedCallbacks
     }
 
+    private fun resendVerificationCode(phoneNumber: String,
+                                       token: PhoneAuthProvider.ForceResendingToken?) {
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+            "+62$phoneNumber", // Phone number to verify
+            60, // Timeout duration
+            TimeUnit.SECONDS, // Unit of timeout
+            this, // Activity (for callback binding)
+            callbacks, // OnVerificationStateChangedCallbacks
+            token)             // ForceResendingToken from callbacks
+    }
+
    val  callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks(){
        override fun onVerificationCompleted(p0: PhoneAuthCredential) {
-           val user = FirebaseAuth.getInstance().currentUser
-           user?.updatePhoneNumber(p0)?.addOnSuccessListener {
-               val ref = FirebaseFirestore.getInstance().collection("users")
-                   .document(user.uid)
-               ref.update("numberPhone",txt_nama.text.toString()).addOnSuccessListener {
-                   goToMain()
-               }.addOnFailureListener {
-                   shomethingError()
-               }
-           }?.addOnFailureListener {
-               shomethingError()
+           val code = p0.smsCode
+
+           //sometime the code is not detected automatically
+           //in this case the code will be null
+           //so user has to manually enter the code
+           if (code != null) {
+               form_code.setText(code)
+               //verifying the code
+               verifyVerificationCode(code)
            }
+
+
+
        }
 
        override fun onVerificationFailed(p0: FirebaseException) {
 
        }
 
+       override fun onCodeSent(p0: String, p1: PhoneAuthProvider.ForceResendingToken) {
+           super.onCodeSent(p0, p1)
+           mVerificationId = p0
+       }
+
    }
+
+    private fun verifyVerificationCode(code: String) {
+        val credential = PhoneAuthProvider.getCredential(mVerificationId, code)
+        val user = FirebaseAuth.getInstance().currentUser
+        user?.updatePhoneNumber(credential)?.addOnSuccessListener {
+            val ref = FirebaseFirestore.getInstance().collection("users")
+                .document(user.uid)
+            ref.update("numberPhone","+62$number").addOnSuccessListener {
+                goToMain()
+            }.addOnFailureListener {
+                shomethingError()
+            }
+        }?.addOnFailureListener {
+            shomethingError()
+        }
+    }
 
     private fun shomethingError(){
         Toast.makeText(this@PhoneValidation,"Something is Error Please Try Again", Toast.LENGTH_LONG).show()
