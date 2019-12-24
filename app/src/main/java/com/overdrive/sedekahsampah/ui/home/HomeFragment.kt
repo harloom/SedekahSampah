@@ -36,6 +36,7 @@ import com.overdrive.sedekahsampah.ui.home.post.PostAdapter
 import com.overdrive.sedekahsampah.ui.home.post.PostInfo
 import com.overdrive.sedekahsampah.ui.home.post.komentar.KomentarBottomFragment
 import com.overdrive.sedekahsampah.ui.home.post.komentar.KomentarBottomFragment.Companion.POST_KOMENTAR
+import com.overdrive.sedekahsampah.ui.search.SearchActivity
 import com.overdrive.sedekahsampah.ui.user.UserActivity
 import com.stfalcon.imageviewer.StfalconImageViewer
 
@@ -123,7 +124,13 @@ class HomeFragment : Fragment(), Interaction {
                 }
                 startActivity(Intent(context!!,CreateActivity::class.java))
                 true
-            }else-> true
+            }
+            R.id.action_search->{
+                startActivity(Intent(context!!,SearchActivity::class.java))
+                true
+            }
+
+            else-> return super.onOptionsItemSelected(item)
         }
 
     }
