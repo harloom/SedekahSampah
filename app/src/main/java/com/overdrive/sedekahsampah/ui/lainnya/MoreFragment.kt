@@ -7,13 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.preference.PreferenceManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.overdrive.sedekahsampah.R
 import com.overdrive.sedekahsampah.ui.LoginActivity
+import com.overdrive.sedekahsampah.utils.KEY_SETUP
 
 class MoreFragment : Fragment() {
 
@@ -59,6 +62,11 @@ class MoreFragment : Fragment() {
     }
 
     private fun logOutGoogle(){
+        val shared= PreferenceManager.getDefaultSharedPreferences(context)
+        shared.edit {
+            putBoolean(KEY_SETUP,false)
+            commit()
+        }
         val acc = GoogleSignIn.getLastSignedInAccount(context!!) ?: return
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))

@@ -133,7 +133,6 @@ class LoginActivity : AppCompatActivity() {
 
     private fun cekSetup() : Boolean{
         val shared= PreferenceManager.getDefaultSharedPreferences(this@LoginActivity)
-
         return shared.getBoolean(KEY_SETUP,false)
     }
 
