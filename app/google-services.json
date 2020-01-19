@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "252598738919",
+    "firebase_url": "https://sedakahsampahapp.firebaseio.com",
+    "project_id": "sedakahsampahapp",
+    "storage_bucket": "sedakahsampahapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:252598738919:android:4685e53270fda17a48a742",
+        "android_client_info": {
+          "package_name": "com.overdrive.sedekahsampah"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "252598738919-bfc6984j1069porecofjbfu6p7kj24he.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.overdrive.sedekahsampah",
+            "certificate_hash": "375acd93d75694f251188c2237c87fc90beb945f"
+          }
+        },
+        {
+          "client_id": "252598738919-j3vfgn5g0puhu3hirqkpr9in0p233fe0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcUCxDi8UnZPHw6KcT0yHLV-lZn67hCOs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "252598738919-9f9420ggnfe3qnvglrra53na7nqfkgnp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
